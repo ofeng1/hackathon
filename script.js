@@ -69,28 +69,6 @@ function createTabs() {
           }
         }
 
-        document.getElementById("eventForm").onsubmit = function(event) {
-            event.preventDefault();
-            // Get form values
-            var selectedDay = document.getElementById("selectedDay").value;
-            var startTime = document.getElementById("timeDropDown1").value;
-            var endTime = document.getElementById("timeDropDown2").value;
-            var title = document.getElementById("eventTitle").value;
-            
-            // Process the event (e.g., display it on the calendar or save it)
-            var tabIndex = currentTabIndex;
-
-            // Find the specific day's container within the current tab
-            const dayContainer = document.getElementById(`${selectedDay}-${tabIndex}`);
-            if (dayContainer) {
-                const newEventDiv = document.createElement('div');
-                newEventDiv.textContent = `${title} (${startTime} - ${endTime})`;
-                dayContainer.appendChild(newEventDiv);
-            }
-
-            // Close the modal
-            modal.style.display = "none";
-          }
 
         tab.appendChild(header);
         tab.appendChild(content);
@@ -98,11 +76,41 @@ function createTabs() {
         content.querySelectorAll('.open-modal-btn').forEach((btn, index) => {
             btn.onclick = function() {
                 modal.style.display = "block";
-
-                document.getElementById('selectedDay').value = daysOfWeek[index];
+                document.getElementById('selectedDay').value = daysOfWeek[index] + "-" + currentTabIndex;
             };
         });
 
         tabsContainer.appendChild(tab)
+    }
+
+
+
+    document.getElementById("eventForm").onsubmit = function(event) {
+      event.preventDefault();
+      // Get form values
+      var selectedDay = document.getElementById("selectedDay").value;
+      var startTime = document.getElementById("timeDropDown1").value;
+      var endTime = document.getElementById("timeDropDown2").value;
+      var title = document.getElementById("eventTitle").value;
+      console.log(selectedDay)
+      console.log(startTime)
+      console.log(endTime)
+      console.log(title)
+      
+      // Process the event (e.g., display it on the calendar or save it)
+      var tabIndex = currentTabIndex;
+
+      console.log(selectedDay)
+      // Find the specific day's container within the current tab
+      const dayContainer = document.getElementById(selectedDay);
+      console.log(dayContainer)
+      if (dayContainer) {
+          const newEventDiv = document.createElement('div');
+          newEventDiv.textContent = `${title} (${startTime} - ${endTime})`;
+          dayContainer.appendChild(newEventDiv);
+      }
+
+      // Close the modal
+      modal.style.display = "none";
     }
 }
