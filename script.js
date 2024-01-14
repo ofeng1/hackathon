@@ -36,7 +36,7 @@ function createTabs() {
         for(const [index, day] of daysOfWeek.entries()) {     
             let button = document.createElement("button");
             button.id =  daysOfWeek[index] + "-" + currentTabIndex;
-            button.type = "butotn"
+            button.type = "submit"
             button.class="open-modal-btn"
             button.setAttribute('data-day', day)
             button.innerHTML = "+"
