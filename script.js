@@ -1,4 +1,8 @@
 var currentTabIndex = 0;
+function btnClick(event, info) {
+  modal.style.display = "block";
+  document.getElementById('selectedDay').value = info;
+}
 function createTabs() {
     const numberOfTabs = document.getElementById('numSchedules').value;
     const tabsContainer = document.getElementById('tabsContainer');
@@ -7,6 +11,8 @@ function createTabs() {
     // Clear existing tabs
     tabsContainer.innerHTML = '';
 
+    
+    
     // Create new tabs
     for (let i = 0; i < numberOfTabs; i++) {
         const tab = document.createElement('div');
@@ -27,32 +33,42 @@ function createTabs() {
         content.textContent = 'Content for Schedule '+(i+1);
         content.style.display = 'none';
 
-        let formContent = '';
-        for(let day of daysOfWeek) {             
-            formContent += `               
-            <div id="${day}-${i}" class="day-container">
-                <label>${day}:</label>
-                <button type="button" class="open-modal-btn" data-day="${day}">+</button>
-                <!-- This is where events for each day will go -->
-            </div>
-            <br><br>
-        `;
-    
+        for(const [index, day] of daysOfWeek.entries()) {     
+            let button = document.createElement("button");
+            button.id =  daysOfWeek[index] + "-" + currentTabIndex;
+            button.type = "butotn"
+            button.class="open-modal-btn"
+            button.setAttribute('data-day', day)
+            button.innerHTML = "+"
+            let formContent = document.createElement("div")
+            formContent.className = "day-container";
+            formContent.id= day-i;
+            formContent.innerHTML = `               
+              <div id="${day}-${i}" class="day-container">
+                  <label>${day}:</label>
+                  <!-- This is where events for each day will go -->
+              </div>
+              <br><br>   
+          `;
+          formContent.querySelector(".day-container").appendChild(button)
+          button.addEventListener("click", function(e) {
+            modal.style.display = "block";
+              document.getElementById('selectedDay').value = daysOfWeek[index] + "-" + currentTabIndex;
+          });
+          content.appendChild(formContent);
+        
         }
-        content.innerHTML = formContent
+
+
 
         // Add an event listener or any additional functionality to each tab
         var modal = document.getElementById("myModal");
 
         // Get the button that opens the modal
-        var btns = document.querySelectorAll(".open-modal-btn"); // Replace with your button class
+        // var btns = document.querySelectorAll(".open-modal-btn"); // Replace with your button class
         
-        // When the user clicks the button, open the modal 
-        btns.forEach(btn => {
-          btn.onclick = function() {
-            modal.style.display = "block";
-          }
-        });
+      
+      
         
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
@@ -72,14 +88,6 @@ function createTabs() {
 
         tab.appendChild(header);
         tab.appendChild(content);
-
-        content.querySelectorAll('.open-modal-btn').forEach((btn, index) => {
-            btn.onclick = function() {
-                modal.style.display = "block";
-                document.getElementById('selectedDay').value = daysOfWeek[index] + "-" + currentTabIndex;
-            };
-        });
-
         tabsContainer.appendChild(tab)
     }
 
@@ -103,7 +111,6 @@ function createTabs() {
       console.log(selectedDay)
       // Find the specific day's container within the current tab
       const dayContainer = document.getElementById(selectedDay);
-      console.log(dayContainer)
       if (dayContainer) {
           const newEventDiv = document.createElement('div');
           newEventDiv.textContent = `${title} (${startTime} - ${endTime})`;
@@ -113,4 +120,5 @@ function createTabs() {
       // Close the modal
       modal.style.display = "none";
     }
+    
 }
